@@ -1,0 +1,58 @@
+# Simple Playfair Cipher (Encryption)
+
+key = input("Enter keyword: ").upper().replace("J", "I")
+text = input("Enter plaintext: ").upper().replace("J", "I").replace(" ", "")
+
+# Create 5x5 matrix
+alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+matrix = ""
+
+for ch in key + alphabet:
+    if ch not in matrix:
+        matrix += ch
+
+print("\nPlayfair Matrix:")
+for i in range(0, 25, 5):
+    print(matrix[i:i+5])
+
+# Prepare plaintext
+prepared = ""
+i = 0
+while i < len(text):
+    a = text[i]
+    if i + 1 < len(text):
+        b = text[i + 1]
+        if a == b:
+            prepared += a + "X"
+            i += 1
+        else:
+            prepared += a + b
+            i += 2
+    else:
+        prepared += a + "X"
+        i += 1
+
+cipher = ""
+
+for i in range(0, len(prepared), 2):
+    a = prepared[i]
+    b = prepared[i + 1]
+
+    p1 = matrix.index(a)
+    p2 = matrix.index(b)
+
+    r1, c1 = divmod(p1, 5)
+    r2, c2 = divmod(p2, 5)
+
+    if r1 == r2:
+        cipher += matrix[r1 * 5 + (c1 + 1) % 5]
+        cipher += matrix[r2 * 5 + (c2 + 1) % 5]
+    elif c1 == c2:
+        cipher += matrix[((r1 + 1) % 5) * 5 + c1]
+        cipher += matrix[((r2 + 1) % 5) * 5 + c2]
+    else:
+        cipher += matrix[r1 * 5 + c2]
+        cipher += matrix[r2 * 5 + c1]
+
+print("\nPrepared Text:", prepared)
+print("Cipher Text:", cipher)
