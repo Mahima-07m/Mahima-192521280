@@ -1,0 +1,15 @@
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+key = "QWERTYUIOPASDFGHJKLZXCVBNM"
+
+plaintext = input("Enter the plaintext: ").upper()
+
+ciphertext = ""
+
+for ch in plaintext:
+    if ch.isalpha():
+        index = alphabet.index(ch)
+        ciphertext += key[index]
+    else:
+        ciphertext += ch
+
+print("Ciphertext:", ciphertext)
