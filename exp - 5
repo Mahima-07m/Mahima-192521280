@@ -1,0 +1,20 @@
+import math
+
+text = input("Enter plaintext: ").upper()
+a = int(input("Enter value of a: "))
+b = int(input("Enter value of b: "))
+
+if math.gcd(a, 26) != 1:
+    print("Invalid value of a")
+else:
+    cipher = ""
+
+    for ch in text:
+        if ch.isalpha():
+            p = ord(ch) - ord('A')
+            c = (a * p + b) % 26
+            cipher += chr(c + ord('A'))
+        else:
+            cipher += ch
+
+    print("Cipher Text:", cipher)
