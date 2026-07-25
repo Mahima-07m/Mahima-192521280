@@ -1,0 +1,17 @@
+text = input("Enter plaintext: ").upper()
+key = input("Enter key: ").upper()
+
+cipher = ""
+j = 0
+
+for i in range(len(text)):
+    if text[i].isalpha():
+        shift = ord(key[j % len(key)]) - ord('A')
+        ch = chr((ord(text[i]) - ord('A') + shift) % 26 + ord('A'))
+        cipher += ch
+        j += 1
+    else:
+        cipher += text[i]
+
+print("Cipher Text:", cipher)
+
