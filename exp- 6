@@ -1,0 +1,27 @@
+# Break Affine Cipher
+
+import math
+
+cipher = input("Enter ciphertext: ").upper()
+
+# Keys obtained using frequency analysis
+a = 3
+b = 13
+
+# Find multiplicative inverse of a
+for i in range(26):
+    if (a * i) % 26 == 1:
+        a_inv = i
+        break
+
+plain = ""
+
+for ch in cipher:
+    if ch.isalpha():
+        c = ord(ch) - ord('A')
+        p = (a_inv * (c - b)) % 26
+        plain += chr(p + ord('A'))
+    else:
+        plain += ch
+
+print("Plaintext:", plain)
