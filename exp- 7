@@ -1,0 +1,11 @@
+# Frequency Analysis for Simple Substitution Cipher
+
+from collections import Counter
+
+cipher = input("Enter the ciphertext:\n")
+
+freq = Counter(cipher)
+
+print("\nSymbol\tFrequency")
+for ch, count in freq.most_common():
+    print(ch, "\t", count)
