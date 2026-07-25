@@ -1,0 +1,22 @@
+m = ["MFHIK", "UNOPQ", "ZVWXY", "ELARG", "DSTBC"]
+
+t = input("Enter text: ").upper().replace("J","I").replace(" ","")
+if len(t)%2: t += "X"
+
+c = ""
+
+for i in range(0,len(t),2):
+    a,b = t[i],t[i+1]
+
+    for r in range(5):
+        if a in m[r]: r1,c1 = r,m[r].index(a)
+        if b in m[r]: r2,c2 = r,m[r].index(b)
+
+    if r1==r2:
+        c += m[r1][(c1+1)%5] + m[r2][(c2+1)%5]
+    elif c1==c2:
+        c += m[(r1+1)%5][c1] + m[(r2+1)%5][c2]
+    else:
+        c += m[r1][c2] + m[r2][c1]
+
+print("Cipher Text:", c)
