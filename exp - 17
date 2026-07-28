@@ -1,0 +1,13 @@
+# DES Key Generation for Decryption
+
+keys = []
+
+print("Enter 16 encryption round keys:")
+
+for i in range(16):
+    keys.append(input(f"K{i+1}: "))
+
+print("\nDecryption Round Keys:")
+
+for i in range(15, -1, -1):
+    print(f"K{16-i} =", keys[i])
