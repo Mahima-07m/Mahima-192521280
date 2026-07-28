@@ -1,0 +1,13 @@
+# One-Time Pad (Vigenere Cipher)
+
+text = input("Enter plaintext: ").lower().replace(" ", "")
+key = list(map(int, input("Enter key stream: ").split()))
+
+cipher = ""
+
+for i in range(len(text)):
+    p = ord(text[i]) - ord('a')
+    c = (p + key[i]) % 26
+    cipher += chr(c + ord('a'))
+
+print("Ciphertext:", cipher)
