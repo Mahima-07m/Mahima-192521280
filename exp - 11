@@ -1,0 +1,13 @@
+import math
+
+# Total possible keys
+total_keys = math.factorial(25)
+
+# Effectively unique keys
+unique_keys = total_keys // 2
+
+print("Total Possible Keys =", total_keys)
+print("Approximate Power of 2 = 2^", round(math.log2(total_keys), 2))
+
+print("\nEffectively Unique Keys =", unique_keys)
+print("Approximate Power of 2 = 2^", round(math.log2(unique_keys), 2))
