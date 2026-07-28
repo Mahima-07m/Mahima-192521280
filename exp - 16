@@ -1,0 +1,27 @@
+from collections import Counter
+
+cipher = input("Enter Ciphertext: ").upper()
+top = int(input("Enter number of possible plaintexts: "))
+
+english = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+letters = [c for c in cipher if c.isalpha()]
+freq = Counter(letters)
+order = [x[0] for x in freq.most_common()]
+
+for k in range(top):
+    mapping = {}
+
+    for i in range(len(order)):
+        mapping[order[i]] = english[(i + k) % 26]
+
+    plain = ""
+
+    for ch in cipher:
+        if ch.isalpha():
+            plain += mapping.get(ch, ch)
+        else:
+            plain += ch
+
+    print(f"\nPossible Plaintext {k+1}:")
+    print(plain)
