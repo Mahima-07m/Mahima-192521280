@@ -1,0 +1,20 @@
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+
+# 16-byte secret key
+key = b'1234567890abcdef'
+
+# Zero Initialization Vector
+iv = b'\x00' * 16
+
+# One-block message
+message = input("Enter Message: ").encode()
+
+# CBC-MAC
+cipher = AES.new(key, AES.MODE_CBC, iv)
+ciphertext = cipher.encrypt(pad(message, 16))
+
+# Last block is the MAC
+mac = ciphertext[-16:]
+
+print("CBC-MAC (Hex):", mac.hex())
