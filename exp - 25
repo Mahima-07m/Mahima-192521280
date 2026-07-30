@@ -1,0 +1,15 @@
+# RSA Common Factor Attack
+
+import math
+
+n = int(input("Enter value of n: "))
+plaintext = int(input("Enter plaintext block: "))
+
+g = math.gcd(plaintext, n)
+
+if g > 1 and g < n:
+    print("Common factor found:", g)
+    print("Other factor:", n // g)
+    print("RSA modulus can be factored.")
+else:
+    print("No common factor found.")
