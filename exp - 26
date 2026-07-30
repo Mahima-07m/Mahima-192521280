@@ -1,0 +1,18 @@
+# RSA Key Generation
+
+from math import gcd
+
+p = int(input("Enter prime p: "))
+q = int(input("Enter prime q: "))
+e = int(input("Enter public exponent e: "))
+
+n = p * q
+phi = (p - 1) * (q - 1)
+
+# Find d such that (d * e) % phi == 1
+d = 1
+while (d * e) % phi != 1:
+    d += 1
+
+print("\nPublic Key :", (e, n))
+print("Private Key:", (d, n))
