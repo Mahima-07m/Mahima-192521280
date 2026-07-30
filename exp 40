@@ -1,0 +1,27 @@
+from collections import Counter
+
+cipher = input("Enter Ciphertext: ").upper()
+top = int(input("Top Results: "))
+
+english = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+letters = [c for c in cipher if c.isalpha()]
+freq = Counter(letters)
+order = [x[0] for x in freq.most_common()]
+
+for t in range(top):
+    table = {}
+
+    for i in range(len(order)):
+        table[order[i]] = english[(i+t) % 26]
+
+    plain = ""
+
+    for ch in cipher:
+        if ch.isalpha():
+            plain += table.get(ch, ch)
+        else:
+            plain += ch
+
+    print("\nCandidate", t+1)
+    print(plain)
