@@ -1,0 +1,14 @@
+cipher = input("Enter Ciphertext: ").upper()
+
+n = int(input("Enter number of possible plaintexts: "))
+
+for shift in range(n):
+    plain = ""
+
+    for ch in cipher:
+        if ch.isalpha():
+            plain += chr((ord(ch)-65-shift) % 26 + 65)
+        else:
+            plain += ch
+
+    print(f"Shift {shift:2d}: {plain}")
