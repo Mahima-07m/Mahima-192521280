@@ -1,0 +1,29 @@
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad
+
+# Input
+plaintext = input("Enter Plaintext: ").encode()
+
+# Generate 24-byte key and 8-byte IV
+key = DES3.adjust_key_parity(get_random_bytes(24))
+iv = get_random_bytes(8)
+
+# Pad plaintext
+data = pad(plaintext, DES3.block_size)
+
+# ECB Mode
+ecb = DES3.new(key, DES3.MODE_ECB)
+ecb_cipher = ecb.encrypt(data)
+
+# CBC Mode
+cbc = DES3.new(key, DES3.MODE_CBC, iv)
+cbc_cipher = cbc.encrypt(data)
+
+# CFB Mode
+cfb = DES3.new(key, DES3.MODE_CFB, iv)
+cfb_cipher = cfb.encrypt(plaintext)
+
+print("\nECB Ciphertext:", ecb_cipher.hex())
+print("CBC Ciphertext:", cbc_cipher.hex())
+print("CFB Ciphertext:", cfb_cipher.hex())
