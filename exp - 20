@@ -1,0 +1,17 @@
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad
+
+# Plaintext
+plaintext = input("Enter Plaintext: ").encode()
+
+# Generate a valid 24-byte 3DES key
+key = DES3.adjust_key_parity(get_random_bytes(24))
+
+# Create ECB cipher
+cipher = DES3.new(key, DES3.MODE_ECB)
+
+# Encrypt
+ciphertext = cipher.encrypt(pad(plaintext, DES3.block_size))
+
+print("Ciphertext (Hex):", ciphertext.hex())
