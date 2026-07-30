@@ -1,0 +1,23 @@
+from Crypto.Cipher import DES
+from Crypto.Util.Padding import pad, unpad
+
+# 8-byte DES key
+key = b'12345678'
+
+# 8-byte Initialization Vector
+iv = b'ABCDEFGH'
+
+# Input
+plaintext = input("Enter Plaintext: ").encode()
+
+# Encryption
+cipher = DES.new(key, DES.MODE_CBC, iv)
+ciphertext = cipher.encrypt(pad(plaintext, DES.block_size))
+
+print("Ciphertext (Hex):", ciphertext.hex())
+
+# Decryption
+cipher = DES.new(key, DES.MODE_CBC, iv)
+decrypted = unpad(cipher.decrypt(ciphertext), DES.block_size)
+
+print("Decrypted Text:", decrypted.decode())
