@@ -1,0 +1,17 @@
+# RSA Encryption (Character by Character)
+
+e = int(input("Enter public key e: "))
+n = int(input("Enter modulus n: "))
+
+plaintext = input("Enter plaintext: ").upper()
+
+cipher = []
+
+for ch in plaintext:
+    if ch.isalpha():
+        m = ord(ch) - ord('A')
+        c = pow(m, e, n)
+        cipher.append(c)
+
+print("Ciphertext:")
+print(cipher)
