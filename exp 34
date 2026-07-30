@@ -1,0 +1,24 @@
+from Crypto.Cipher import DES3
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad
+
+plaintext = input("Enter Plaintext: ").encode()
+
+key = DES3.adjust_key_parity(get_random_bytes(24))
+iv = get_random_bytes(8)
+
+# ECB
+ecb = DES3.new(key, DES3.MODE_ECB)
+ecb_cipher = ecb.encrypt(pad(plaintext, DES3.block_size))
+
+# CBC
+cbc = DES3.new(key, DES3.MODE_CBC, iv)
+cbc_cipher = cbc.encrypt(pad(plaintext, DES3.block_size))
+
+# CFB
+cfb = DES3.new(key, DES3.MODE_CFB, iv)
+cfb_cipher = cfb.encrypt(plaintext)
+
+print("\nECB :", ecb_cipher.hex())
+print("CBC :", cbc_cipher.hex())
+print("CFB :", cfb_cipher.hex())
