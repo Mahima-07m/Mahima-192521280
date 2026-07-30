@@ -1,0 +1,28 @@
+# Counter (CTR) Mode Encryption & Decryption
+
+plaintext = input("Enter Plaintext: ")
+
+key = 25          # Secret key
+counter = 0
+
+cipher = []
+
+# Encryption
+for ch in plaintext:
+    keystream = (key + counter) % 256
+    cipher_byte = ord(ch) ^ keystream
+    cipher.append(cipher_byte)
+    counter += 1
+
+print("Ciphertext:", cipher)
+
+# Decryption
+counter = 0
+plain = ""
+
+for c in cipher:
+    keystream = (key + counter) % 256
+    plain += chr(c ^ keystream)
+    counter += 1
+
+print("Decrypted Text:", plain)
