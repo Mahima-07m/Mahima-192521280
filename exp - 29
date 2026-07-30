@@ -1,0 +1,22 @@
+# SHA-3 Sponge Simulation (Ignoring Permutation)
+
+total_lanes = 25
+rate_lanes = 16          # 1024-bit rate = 16 lanes
+capacity_lanes = total_lanes - rate_lanes   # 9 lanes
+
+capacity = [0] * capacity_lanes
+
+blocks = 0
+
+while 0 in capacity:
+    blocks += 1
+
+    # Ignore permutation.
+    # Assume each new message block makes one new capacity lane nonzero.
+    for i in range(capacity_lanes):
+        if capacity[i] == 0:
+            capacity[i] = 1
+            break
+
+print("Capacity Lanes :", capacity_lanes)
+print("Blocks Required:", blocks)
