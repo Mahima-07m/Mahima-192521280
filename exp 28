@@ -1,0 +1,20 @@
+# Diffie-Hellman Key Exchange
+
+q = int(input("Enter prime number (q): "))
+a = int(input("Enter primitive root (a): "))
+
+x = int(input("Enter Alice's secret key: "))
+y = int(input("Enter Bob's secret key: "))
+
+# Public keys
+A = pow(a, x, q)
+B = pow(a, y, q)
+
+# Shared secret
+alice_key = pow(B, x, q)
+bob_key = pow(A, y, q)
+
+print("Alice Public Key:", A)
+print("Bob Public Key:", B)
+print("Shared Secret (Alice):", alice_key)
+print("Shared Secret (Bob):", bob_key)
