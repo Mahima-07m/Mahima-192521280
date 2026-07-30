@@ -1,0 +1,37 @@
+# RSA Private Key Generation
+
+e = 31
+n = 3599
+
+# Step 1: Find p and q
+for i in range(2, int(n**0.5) + 1):
+    if n % i == 0:
+        p = i
+        q = n // i
+        break
+
+# Step 2: Compute phi(n)
+phi = (p - 1) * (q - 1)
+
+# Step 3: Extended Euclidean Algorithm
+def mod_inverse(a, m):
+    t, new_t = 0, 1
+    r, new_r = m, a
+
+    while new_r != 0:
+        q = r // new_r
+        t, new_t = new_t, t - q * new_t
+        r, new_r = new_r, r - q * new_r
+
+    if t < 0:
+        t += m
+
+    return t
+
+d = mod_inverse(e, phi)
+
+print("p =", p)
+print("q =", q)
+print("phi(n) =", phi)
+print("Public Key =", (e, n))
+print("Private Key =", (d, n))
