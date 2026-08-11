@@ -1,0 +1,41 @@
+import hashlib
+import secrets
+
+# Public parameters
+p = 467
+g = 2
+
+# Private key
+x = secrets.randbelow(p - 2) + 1
+
+# Public key
+y = pow(g, x, p)
+
+message = input("Enter message: ")
+
+# Hash the message
+h = int(hashlib.sha256(message.encode()).hexdigest(), 16) % (p - 1)
+
+# Generate random k such that gcd(k, p-1) = 1
+while True:
+    k = secrets.randbelow(p - 2) + 1
+    if __import__("math").gcd(k, p - 1) == 1:
+        break
+
+# Generate signature (r, s)
+r = pow(g, k, p)
+k_inv = pow(k, -1, p - 1)
+s = ((h - x * r) * k_inv) % (p - 1)
+
+print("\nPublic Key:", (p, g, y))
+print("Signature:", (r, s))
+
+# Verification
+v1 = (pow(y, r, p) * pow(r, s, p)) % p
+v2 = pow(g, h, p)
+
+if v1 == v2:
+    print("Signature Verification: SUCCESS")
+    print("Message is authentic and unchanged.")
+else:
+    print("Signature Verification: FAILED")
