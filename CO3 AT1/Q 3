@@ -1,0 +1,32 @@
+import hashlib
+import hmac
+
+message = input("Enter message: ").encode()
+key = input("Enter secret key: ").encode()
+
+# Simple hash integrity check
+simple_hash = hashlib.sha256(message).hexdigest()
+
+# HMAC using SHA-256
+hmac_value = hmac.new(key, message, hashlib.sha256).hexdigest()
+
+print("\nMessage:", message.decode())
+print("SHA-256 Hash :", simple_hash)
+print("HMAC-SHA256  :", hmac_value)
+
+# Verification
+received_message = input("\nEnter message for verification: ").encode()
+
+# Simple hash verification
+if hashlib.sha256(received_message).hexdigest() == simple_hash:
+    print("Simple Hash Verification: SUCCESS")
+else:
+    print("Simple Hash Verification: FAILED")
+
+# HMAC verification
+received_hmac = hmac.new(key, received_message, hashlib.sha256).hexdigest()
+
+if hmac.compare_digest(received_hmac, hmac_value):
+    print("HMAC Verification: SUCCESS")
+else:
+    print("HMAC Verification: FAILED")
