@@ -1,0 +1,68 @@
+import hashlib
+import time
+import secrets
+
+# Secret keys shared with the Authentication Server
+client_key = "client_secret"
+server_key = "server_secret"
+
+# Generate ticket
+def generate_ticket(username):
+    timestamp = int(time.time())
+    session_key = secrets.token_hex(16)
+
+    ticket_data = f"{username}|{session_key}|{timestamp}"
+    ticket = hashlib.sha256(
+        (ticket_data + server_key).encode()
+    ).hexdigest()
+
+    return ticket_data, ticket, session_key
+
+
+# Validate ticket at server
+def validate_ticket(ticket_data, ticket, session_key):
+    username, key, timestamp = ticket_data.split("|")
+
+    # Check ticket authenticity
+    expected_ticket = hashlib.sha256(
+        (ticket_data + server_key).encode()
+    ).hexdigest()
+
+    # Check timestamp to prevent replay
+    current_time = int(time.time())
+
+    if ticket != expected_ticket:
+        return False, "Invalid ticket"
+
+    if key != session_key:
+        return False, "Invalid session key"
+
+    if current_time - int(timestamp) > 30:
+        return False, "Ticket expired"
+
+    return True, f"Authentication successful for {username}"
+
+
+# Client requests a ticket
+username = input("Enter username: ")
+
+ticket_data, ticket, session_key = generate_ticket(username)
+
+print("\n--- Ticket Generated ---")
+print("Ticket:", ticket)
+print("Session Key:", session_key)
+
+# Server validates the ticket
+valid, message = validate_ticket(ticket_data, ticket, session_key)
+
+print("\n--- Server Validation ---")
+print(message)
+
+# Simulate replay attack using an expired/old ticket
+print("\n--- Replay Attack Simulation ---")
+time.sleep(1)
+
+valid, message = validate_ticket(ticket_data, ticket, session_key)
+
+print(message)
+print("Timestamp checking prevents the reuse of expired tickets.")
