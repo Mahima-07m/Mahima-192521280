@@ -1,0 +1,46 @@
+import hashlib
+
+def generate_keystream(key, length):
+    stream = b""
+    counter = 0
+
+    while len(stream) < length:
+        data = key.encode() + counter.to_bytes(4, "big")
+        stream += hashlib.sha256(data).digest()
+        counter += 1
+
+    return stream[:length]
+
+def encrypt(payload, key):
+    payload_bytes = payload.encode()
+    keystream = generate_keystream(key, len(payload_bytes))
+
+    encrypted = bytes(
+        a ^ b for a, b in zip(payload_bytes, keystream)
+    )
+
+    return encrypted.hex()
+
+def decrypt(ciphertext, key):
+    encrypted = bytes.fromhex(ciphertext)
+    keystream = generate_keystream(key, len(encrypted))
+
+    decrypted = bytes(
+        a ^ b for a, b in zip(encrypted, keystream)
+    )
+
+    return decrypted.decode()
+
+# Simulated IP payload
+payload = "Confidential IPSec message"
+key = "esp-secret-key"
+
+print("Original Payload :", payload)
+
+# ESP Encryption
+ciphertext = encrypt(payload, key)
+print("Encrypted Payload:", ciphertext)
+
+# ESP Decryption
+decrypted = decrypt(ciphertext, key)
+print("Decrypted Payload:", decrypted)
