@@ -1,0 +1,90 @@
+import re
+
+spam_words = [
+    "win",
+    "winner",
+    "free",
+    "prize",
+    "offer",
+    "urgent",
+    "claim",
+    "lottery",
+    "money",
+    "click here",
+    "limited time"
+]
+
+
+def classify_email(sender, subject, body):
+    score = 0
+
+    # Header analysis
+    if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", sender):
+        score += 2
+
+    suspicious_domains = [
+        "spam.com",
+        "fake.com",
+        "unknown.com"
+    ]
+
+    domain = sender.split("@")[-1].lower()
+
+    if domain in suspicious_domains:
+        score += 2
+
+    # Content analysis
+    text = (subject + " " + body).lower()
+
+    for word in spam_words:
+        if word in text:
+            score += 1
+
+    # Excessive exclamation marks
+    if text.count("!") >= 3:
+        score += 1
+
+    # Classification
+    if score >= 3:
+        return "SPAM", score
+    else:
+        return "LEGITIMATE", score
+
+
+# Test Email 1
+sender1 = "offers@spam.com"
+subject1 = "You won a FREE prize!"
+body1 = "Click here to claim your money now!!!"
+
+result, score = classify_email(
+    sender1,
+    subject1,
+    body1
+)
+
+print("Email 1")
+print("Sender :", sender1)
+print("Subject:", subject1)
+print("Score  :", score)
+print("Result :", result)
+
+
+print("\n----------------------------\n")
+
+
+# Test Email 2
+sender2 = "teacher@college.edu"
+subject2 = "Assignment Submission"
+body2 = "Please submit your assignment before Friday."
+
+result, score = classify_email(
+    sender2,
+    subject2,
+    body2
+)
+
+print("Email 2")
+print("Sender :", sender2)
+print("Subject:", subject2)
+print("Score  :", score)
+print("Result :", result)
