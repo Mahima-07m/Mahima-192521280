@@ -1,0 +1,63 @@
+class SecurityAssociation:
+    def __init__(self, spi, source, destination, algorithm, key):
+        self.spi = spi
+        self.source = source
+        self.destination = destination
+        self.algorithm = algorithm
+        self.key = key
+
+    def display(self):
+        print("SPI         :", self.spi)
+        print("Source      :", self.source)
+        print("Destination :", self.destination)
+        print("Algorithm   :", self.algorithm)
+        print("Key         :", self.key)
+
+
+class SAManager:
+    def __init__(self):
+        self.associations = {}
+
+    def create_sa(self, spi, source, destination, algorithm, key):
+        sa = SecurityAssociation(
+            spi, source, destination, algorithm, key
+        )
+
+        self.associations[spi] = sa
+        print("Security Association created.")
+
+    def lookup_sa(self, spi):
+        if spi in self.associations:
+            print("\nSecurity Association found:")
+            self.associations[spi].display()
+        else:
+            print("Security Association not found.")
+
+    def delete_sa(self, spi):
+        if spi in self.associations:
+            del self.associations[spi]
+            print("Security Association deleted.")
+        else:
+            print("Security Association not found.")
+
+
+# Create SA Manager
+manager = SAManager()
+
+# Create Security Association
+manager.create_sa(
+    1001,
+    "192.168.1.10",
+    "192.168.1.20",
+    "AES-256",
+    "secretkey123"
+)
+
+# Lookup SA
+manager.lookup_sa(1001)
+
+# Delete SA
+manager.delete_sa(1001)
+
+# Verify deletion
+manager.lookup_sa(1001)
