@@ -1,0 +1,107 @@
+import hashlib
+import random
+import math
+
+# ---------- RSA FUNCTIONS ----------
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+
+def mod_inverse(e, phi):
+    old_r, r = e, phi
+    old_s, s = 1, 0
+
+    while r:
+        quotient = old_r // r
+        old_r, r = r, old_r - quotient * r
+        old_s, s = s, old_s - quotient * s
+
+    return old_s % phi
+
+
+def generate_keys():
+    p = 61
+    q = 53
+
+    n = p * q
+    phi = (p - 1) * (q - 1)
+
+    e = 17
+    d = mod_inverse(e, phi)
+
+    public_key = (e, n)
+    private_key = (d, n)
+
+    return public_key, private_key
+
+
+def encrypt(message, public_key):
+    e, n = public_key
+
+    encrypted = []
+    for char in message:
+        encrypted.append(pow(ord(char), e, n))
+
+    return encrypted
+
+
+def decrypt(ciphertext, private_key):
+    d, n = private_key
+
+    message = ""
+    for value in ciphertext:
+        message += chr(pow(value, d, n))
+
+    return message
+
+
+# ---------- DIGITAL SIGNATURE ----------
+
+def create_signature(message, private_key):
+    d, n = private_key
+
+    digest = hashlib.sha256(message.encode()).hexdigest()
+    digest_number = int(digest, 16)
+
+    return pow(digest_number, d, n)
+
+
+def verify_signature(message, signature, public_key):
+    e, n = public_key
+
+    digest = hashlib.sha256(message.encode()).hexdigest()
+    digest_number = int(digest, 16)
+
+    calculated = pow(signature, e, n)
+
+    return calculated == (digest_number % n)
+
+
+# ---------- PGP SIMULATION ----------
+
+public_key, private_key = generate_keys()
+
+message = "Meet me at 10 AM."
+
+print("Original Message :", message)
+
+# Encrypt message
+encrypted = encrypt(message, public_key)
+print("Encrypted Message:", encrypted)
+
+# Sign message
+signature = create_signature(message, private_key)
+print("Digital Signature :", signature)
+
+# Decrypt message
+decrypted = decrypt(encrypted, private_key)
+print("Decrypted Message :", decrypted)
+
+# Verify signature
+if verify_signature(decrypted, signature, public_key):
+    print("Signature Verification: SUCCESS")
+else:
+    print("Signature Verification: FAILED")
